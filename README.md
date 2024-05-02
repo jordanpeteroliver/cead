@@ -1,4 +1,4 @@
-
+![]https://api.placid.app/u/qsraj?title[text]={Ultrassom%20tecnologia}
 # Ultrassom: A tecnologia segura e não-invasiva para diagnósticos de precisão
 Saúde e segurança na palma da sua mão
 Aprenda tudo sobre os benefícios da ultrassonografia
