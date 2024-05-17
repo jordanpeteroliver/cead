@@ -1,19 +1,145 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <title>Other page</title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="stylesheet" href="styles.css" />
-    <script type="module" src="script.js"></script>
-  </head>
-  <body>
-    <nav>
-      <a href="/">Home</a>
-      <a href="/page2.html" aria-current="page">Other page</a>
-    </nav>
-    <main>
-      <h1>My other page</h1>
-    </main>
-  </body>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Bootstrap</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet">
+    <style>
+        .calculator {
+            width: 320px;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #f7f7f7;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            position: absolute;
+            cursor: move;
+        }
+        .calculator .display {
+            height: 70px;
+            background-color: #e9ecef;
+            margin-bottom: 20px;
+            text-align: right;
+            padding: 10px;
+            font-size: 24px;
+            border-radius: 5px;
+        }
+        .calculator button {
+            width: 75px;
+            height: 75px;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="calculator" id="calculator">
+        <div class="display" id="display">0</div>
+        <div class="row">
+            <button class="btn btn-secondary col" onclick="appendNumber(7)">7</button>
+            <button class="btn btn-secondary col" onclick="appendNumber(8)">8</button>
+            <button class="btn btn-secondary col" onclick="appendNumber(9)">9</button>
+            <button class="btn btn-warning col" onclick="chooseOperation('/')">/</button>
+        </div>
+        <div class="row">
+            <button class="btn btn-secondary col" onclick="appendNumber(4)">4</button>
+            <button class="btn btn-secondary col" onclick="appendNumber(5)">5</button>
+            <button class="btn btn-secondary col" onclick="appendNumber(6)">6</button>
+            <button class="btn btn-warning col" onclick="chooseOperation('*')">*</button>
+        </div>
+        <div class="row">
+            <button class="btn btn-secondary col" onclick="appendNumber(1)">1</button>
+            <button class="btn btn-secondary col" onclick="appendNumber(2)">2</button>
+            <button class="btn btn-secondary col" onclick="appendNumber(3)">3</button>
+            <button class="btn btn-warning col" onclick="chooseOperation('-')">-</button>
+        </div>
+        <div class="row">
+            <button class="btn btn-secondary col" onclick="appendNumber(0)">0</button>
+            <button class="btn btn-secondary col" onclick="appendNumber('.')">.</button>
+            <button class="btn btn-danger col" onclick="clearDisplay()">C</button>
+            <button class="btn btn-warning col" onclick="chooseOperation('+')">+</button>
+        </div>
+        <div class="row">
+            <button class="btn btn-primary col-12" onclick="calculate()">=</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<script>
+    $(function() {
+        $("#calculator").draggable();
+    });
+
+    let display = document.getElementById('display');
+    let currentOperand = '';
+    let previousOperand = '';
+    let operation = undefined;
+
+    function appendNumber(number) {
+        if (number === '.' && currentOperand.includes('.')) return;
+        currentOperand = currentOperand.toString() + number.toString();
+        updateDisplay();
+    }
+
+    function chooseOperation(op) {
+        if (currentOperand === '') return;
+        if (previousOperand !== '') {
+            calculate();
+        }
+        operation = op;
+        previousOperand = currentOperand;
+        currentOperand = '';
+        updateDisplay();
+    }
+
+    function calculate() {
+        let result;
+        const prev = parseFloat(previousOperand);
+        const current = parseFloat(currentOperand);
+        if (isNaN(prev) || isNaN(current)) return;
+        switch (operation) {
+            case '+':
+                result = prev + current;
+                break;
+            case '-':
+                result = prev - current;
+                break;
+            case '*':
+                result = prev * current;
+                break;
+            case '/':
+                result = prev / current;
+                break;
+            default:
+                return;
+        }
+        currentOperand = result;
+        operation = undefined;
+        previousOperand = '';
+        updateDisplay();
+    }
+
+    function clearDisplay() {
+        currentOperand = '';
+        previousOperand = '';
+        operation = undefined;
+        updateDisplay();
+    }
+
+    function updateDisplay() {
+        display.innerText = currentOperand;
+        if (operation != null) {
+            display.innerText = previousOperand + ' ' + operation + ' ' + currentOperand;
+        }
+        if (currentOperand === '' && previousOperand === '') {
+            display.innerText = '0';
+        }
+    }
+</script>
+
+</body>
 </html>
